@@ -1,17 +1,19 @@
 import type { GetServerSidePropsContext } from 'next';
 import { fromNodeHeaders } from 'better-auth/node';
 import { auth } from '@/lib/auth';
+import { ROLES } from '@/lib/constants/roles';
+import { ROUTES } from '@/lib/constants/routes';
 
 type BetterAuthSession = Awaited<ReturnType<typeof auth.api.getSession>>;
 type GuardRedirect = { destination: string; permanent: false };
 
 const loginRedirect: GuardRedirect = {
-  destination: '/login',
+  destination: ROUTES.LOGIN,
   permanent: false,
 };
 
 const homeRedirect: GuardRedirect = {
-  destination: '/',
+  destination: ROUTES.HOME,
   permanent: false,
 };
 
@@ -44,7 +46,7 @@ export const requireAdminGuard = async (
   }
 
   const role = (authResult.session.user as { role?: string }).role;
-  if (role !== 'ADMIN') {
+  if (role !== ROLES.ADMIN) {
     return { redirect: homeRedirect };
   }
 

@@ -3,6 +3,7 @@ import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { PrismaClient } from '@prisma/client';
 import { PrismaPg } from '@prisma/adapter-pg';
 import { Pool } from 'pg';
+import { ROLE_VALUES, ROLES } from '@/lib/constants/roles';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -10,6 +11,7 @@ const pool = new Pool({
 
 const adapter = new PrismaPg(pool);
 const prisma = new PrismaClient({ adapter });
+const roleFieldValues = [...ROLE_VALUES];
 
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
@@ -24,9 +26,9 @@ export const auth = betterAuth({
   user: {
     additionalFields: {
       role: {
-        type: ['USER', 'ADMIN'],
+        type: roleFieldValues,
         required: false,
-        defaultValue: 'ADMIN',
+        defaultValue: ROLES.ADMIN,
         input: false,
         returned: true,
       },
