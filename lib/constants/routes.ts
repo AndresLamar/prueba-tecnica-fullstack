@@ -4,6 +4,8 @@ export const ROUTES = {
   HOME: '/',
   LOGIN: '/login',
   MOVEMENTS: '/movements',
+  MOVEMENTS_NEW: '/movements/new',
+  MOVEMENTS_EDIT: '/movements/[id]',
   USERS: '/users',
   USERS_EDIT: '/users/[id]',
   REPORTS: '/reports',
@@ -26,12 +28,14 @@ export const PROTECTED_ROUTE_META: RouteMeta[] = [
 
 export const PROTECTED_ROUTE_PATHS = PROTECTED_ROUTE_META.map(
   (route) => route.path
-).concat(ROUTES.USERS_EDIT);
+).concat([ROUTES.USERS_EDIT, ROUTES.MOVEMENTS_NEW, ROUTES.MOVEMENTS_EDIT]);
 
 export const PAGE_TITLES_BY_ROUTE: Record<AppRoute, string> = {
   [ROUTES.HOME]: 'Home',
   [ROUTES.LOGIN]: 'Login',
   [ROUTES.MOVEMENTS]: 'Movimientos',
+  [ROUTES.MOVEMENTS_NEW]: 'Nuevo movimiento',
+  [ROUTES.MOVEMENTS_EDIT]: 'Editar movimiento',
   [ROUTES.USERS]: 'Usuarios',
   [ROUTES.USERS_EDIT]: 'Editar usuario',
   [ROUTES.REPORTS]: 'Reportes',

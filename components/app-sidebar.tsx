@@ -33,8 +33,11 @@ const navIconByPath: Record<(typeof ROUTES)[keyof typeof ROUTES], React.Componen
   [ROUTES.HOME]: Home,
   [ROUTES.LOGIN]: Home,
   [ROUTES.MOVEMENTS]: ReceiptText,
+  [ROUTES.MOVEMENTS_NEW]: ReceiptText,
+  [ROUTES.MOVEMENTS_EDIT]: ReceiptText,
   [ROUTES.USERS]: Users,
   [ROUTES.REPORTS]: LineChart,
+  [ROUTES.USERS_EDIT]: Users,
 };
 
 export const AppSidebar = ({ ...props }: React.ComponentProps<typeof Sidebar>) => {
