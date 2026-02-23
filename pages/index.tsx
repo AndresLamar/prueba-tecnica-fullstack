@@ -1,32 +1,19 @@
-import type { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { Lock } from 'lucide-react';
 
-import { requireSessionGuard } from '@/lib/auth/guards';
 import { HOME_SECTION_ROUTES } from '@/lib/constants/routes';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ROLES, type Role } from '@/lib/constants/roles';
+import { authClient } from '@/lib/auth/client';
 import { cn, getRoleLabel } from '@/lib/utils'; 
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const authResult = await requireSessionGuard(context);
+export default function Home() {
+  const { data: session } = authClient.useSession();
+  const role: Role = getRoleLabel(
+    session?.user ? (session.user as { role?: unknown }).role : undefined,
+  );
 
-  if ('redirect' in authResult) {
-    return {
-      redirect: authResult.redirect,
-    };
-  }
-
-  const role = getRoleLabel((authResult.session.user as { role?: unknown }).role);
-  return { props: { role } };
-};
-
-type HomeProps = {
-  role: Role;
-};
-
-export default function Home({ role }: HomeProps) {
   return (
     <section className='mx-auto flex w-full max-w-5xl flex-col gap-6 py-8'>
       <Card className='border-white/15 bg-white/5 text-slate-100 shadow-sm backdrop-blur-sm'>
