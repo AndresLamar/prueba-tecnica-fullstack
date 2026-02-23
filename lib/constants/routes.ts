@@ -5,6 +5,7 @@ export const ROUTES = {
   LOGIN: '/login',
   MOVEMENTS: '/movements',
   USERS: '/users',
+  USERS_EDIT: '/users/[id]',
   REPORTS: '/reports',
 } as const;
 
@@ -23,13 +24,16 @@ export const PROTECTED_ROUTE_META: RouteMeta[] = [
   { path: ROUTES.REPORTS, title: 'Reportes', minRole: ROLES.ADMIN },
 ];
 
-export const PROTECTED_ROUTE_PATHS = PROTECTED_ROUTE_META.map((route) => route.path);
+export const PROTECTED_ROUTE_PATHS = PROTECTED_ROUTE_META.map(
+  (route) => route.path
+).concat(ROUTES.USERS_EDIT);
 
 export const PAGE_TITLES_BY_ROUTE: Record<AppRoute, string> = {
   [ROUTES.HOME]: 'Home',
   [ROUTES.LOGIN]: 'Login',
   [ROUTES.MOVEMENTS]: 'Movimientos',
   [ROUTES.USERS]: 'Usuarios',
+  [ROUTES.USERS_EDIT]: 'Editar usuario',
   [ROUTES.REPORTS]: 'Reportes',
 };
 
