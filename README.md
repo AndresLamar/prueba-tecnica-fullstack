@@ -1,117 +1,144 @@
-## Prueba Técnica para Desarrollador Fullstack
+# Prueba técnica fullstack - FinanzasApp
 
-### Introducción
+Aplicación fullstack para gestión de movimientos financieros (ingresos/egresos), administración de usuarios y reportes, construida con Next.js (`pages` router), TypeScript, Tailwind, Prisma, Better Auth y PostgreSQL (Supabase).
 
-El objetivo de esta prueba técnica es evaluar tus habilidades en el desarrollo de una aplicación fullstack. Deberás implementar un sistema de gestión de ingresos y egresos, la gestión de usuarios y la generación de reportes. El proyecto cuenta con [wireframes](<https://www.figma.com/design/2PINjveveJJ9ZAAwxwNoRK/Wireframes-(Copy)?node-id=0-1&t=6q0Q0id8YnjH9fJt-1>) que pueden servir de guía para el candidato. Sin embargo, el diseño de la interfaz de usuario es libre.
+## Estado de cumplimiento de la prueba
 
-### Requisitos del Proyecto
+Revisión del código actual:
 
-#### Funcionalidades Principales
+- Roles y permisos con RBAC implementados en frontend y backend.
+- Autenticación con Better Auth + GitHub implementada.
+- Nuevos usuarios con rol por defecto `ADMIN` implementado.
+- Home con navegación a movimientos, usuarios y reportes implementado.
+- Movimientos con listado, creación, edición y eliminación implementado.
+- Gestión de usuarios (listado y edición de nombre/rol) implementado.
+- Reportes con resumen, gráfica y descarga CSV implementado.
+- Endpoints REST en `pages/api` implementados y protegidos.
+- Documentación OpenAPI/Swagger en `/api/docs` + UI en `/docs` implementada.
+- Pruebas unitarias: 3 archivos de test implementados (`vitest`).
 
-1. **Roles y Permisos**
-   - **Roles:**
-     - **Usuario:** Solo puede acceder a la gestión de movimientos.
-     - **Administrador:** Puede ver los reportes, editar usuarios y agregar movimientos.
-   - **Nota:** Para efectos de prueba, todos los nuevos usuarios deben ser automáticamente asignados con el rol "ADMIN".
+## Tecnologías principales
 
-2. **Home**
-   - Página de inicio con un menú principal que permite la navegación a tres secciones:
-     - Sistema de gestión de ingresos y gastos (disponible para todos los roles)
-     - Gestión de usuarios (solo para administradores)
-     - Reportes (solo para administradores)
+- Next.js 15 (`pages` router)
+- TypeScript
+- Tailwind CSS + shadcn/ui
+- TanStack Query
+- Better Auth (GitHub OAuth)
+- Prisma + PostgreSQL (Supabase)
+- Swagger UI + OpenAPI
+- Vitest
 
-3. **Sistema de Gestión de Ingresos y Gastos**
-   - **Vista de Ingresos y Egresos**
-     - Implementar una tabla que muestre los ingresos y egresos registrados con las siguientes columnas:
-       - Concepto
-       - Monto
-       - Fecha
-       - Usuario
-     - Botón "Nuevo" para agregar un nuevo ingreso o egreso (solo para administradores).
-   - **Formulario de Nuevo Ingreso/Egreso**
-     - Formulario con los campos:
-       - Monto
-       - Concepto
-       - Fecha
-     - Botón para guardar el nuevo movimiento.
+## Requisitos previos
 
-4. **Gestión de Usuarios** (solo para administradores)
-   - **Vista de Usuarios**
-     - Tabla que muestre la lista de usuarios con las siguientes columnas:
-       - Nombre
-       - Correo
-       - Teléfono
-       - Acciones (editar usuario)
-   - **Formulario de Edición de Usuario**
-     - Formulario con los campos:
-       - Nombre
-       - Rol
-     - Botón para guardar los cambios.
+- Node.js 20 o superior
+- npm 10 o superior
+- Base de datos PostgreSQL (recomendado Supabase)
+- App OAuth de GitHub configurada (se puede configurar desde https://github.com/settings/developers)
 
-5. **Reportes** (solo para administradores)
-   - Mostrar un gráfico de movimientos financieros.
-   - Mostrar el saldo actual.
-   - Botón para descargar el reporte en formato CSV.
+## Variables de entorno
 
-### Requisitos Técnicos
+Crea el archivo `.env` en la raíz del proyecto con estas variables:
 
-- **Tecnologías y Herramientas:**
-  - **Frontend:**
-    - Next.js utilizando `pages` router.
-    - TypeScript.
-    - Tailwind CSS.
-    - Shadcn para componentes de la interfaz de usuario.
-    - NextJS API routes para comunicación con el backend.
-  - **Backend:**
-    - NextJS API routes para implementar endpoints REST.
-    - Base de datos de Postgres en Supabase.
-     - **Documentación de API:** Implementar una ruta `/api/docs` que exponga la documentación del API usando OpenAPI/Swagger. Cada endpoint creado debe estar completamente documentado con sus parámetros, respuestas y ejemplos.
-   - **Protección de Datos:**
-     - Implementar control de acceso basado en roles (RBAC) para asegurar que solo los usuarios autorizados puedan acceder a ciertas funcionalidades y datos.
-     - Proteger el backend para que rechace conexiones no autenticadas.
-   - **Autenticación:**
-     - Utilizar [Better Auth](https://www.better-auth.com/) con [GitHub](https://github.com/settings/developers) como proveedor de autenticación y [Prisma](https://prisma.io) como adaptador para la autenticación por sesiones de base de datos.
-     - **IMPORTANTE:** Todos los nuevos usuarios que se registren deben ser automáticamente asignados con el rol "ADMIN" para facilitar las pruebas de la aplicación.
-   - **Pruebas unitarias**  - El candidato debe agregar al menos 3 pruebas unitarias donde considere necesario.
-  - **Despliegue:**
-    - Desplegar el proyecto en Vercel.
+```bash
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?sslmode=require"
+GITHUB_CLIENT_ID="tu_github_client_id"
+GITHUB_CLIENT_SECRET="tu_github_client_secret"
+NEXT_PUBLIC_BETTER_AUTH_URL="http://localhost:3000"
+```
 
-### Entregables
+Notas:
 
-1. **Código Fuente:**
-   - Repositorio en GitHub con el código fuente del proyecto.
-   - Incluir un archivo README con instrucciones claras sobre cómo ejecutar el proyecto localmente y cómo desplegarlo en Vercel.
+- En GitHub OAuth usa como callback URL: `http://localhost:3000/api/auth/callback/github`.
 
-2. **Despliegue:**
-   - Proyecto desplegado en Vercel con la URL proporcionada.
+## Ejecución local
 
-### Criterios de Evaluación
+1. Instalar dependencias:
 
-- **Funcionalidad:**
-  - Cumplimiento de todos los requisitos funcionales.
-  - Correcta implementación del CRUD para ingresos, egresos y usuarios.
-  - Generación y descarga de reportes en formato CSV.
+```bash
+npm install
+```
 
-- **Calidad del Código:**
-  - Calidad y claridad del código.
-  - Uso adecuado de las mejores prácticas de desarrollo.
-  - Estructura del proyecto.
-  - Documentación completa de la API con OpenAPI/Swagger.
+2. Aplicar migraciones en la base de datos local/desarrollo:
 
-- **Diseño y UX:**
-  - Usabilidad de la interfaz.
-  - Implementación de un diseño atractivo.
+```bash
+npx prisma migrate dev
+```
 
-- **Pruebas y Documentación:**
-  - Cobertura de pruebas unitarias.
-  - Calidad de los comentarios dentro del proyecto.
+3. Ejecutar el proyecto:
 
-- **Seguridad:**
-  - Implementación efectiva de control de acceso basado en roles (RBAC).
-  - Protección adecuada de los datos sensibles.
+```bash
+npm run dev
+```
 
-- **Notas**:
-  - El aplicativo no debe contener diseño responsivo.
-  - El candidato puede utilizar el código cargado en este repositorio. Sin embargo, esta no es una condición necesaria y el candidato puede iniciar el proyecto de 0 si lo desea.
-  - El candidato puede cambiar las versiones de las librerías si lo considera necesario.
-  - El candidato debe compartir el acceso al repositorio de GitHub y el .env a los correos mlopera@prevalentware.com, jdsanchez@prevalentware.com y dfsorza@prevalentware.com
+4. Abrir en el navegador:
+
+- App: `http://localhost:3000`
+- Swagger UI: `http://localhost:3000/docs`
+- OpenAPI JSON: `http://localhost:3000/api/docs`
+
+## Scripts útiles
+
+```bash
+npm run dev
+npm run build
+npm run start
+npm run lint
+npm run test
+npm run test:watch
+npm run test:coverage
+```
+
+## Despliegue en Vercel
+
+### 1) Preparar OAuth de GitHub para producción
+
+En tu app de GitHub agrega:
+
+- Homepage URL: `https://TU_DOMINIO_VERCEL`
+- Authorization callback URL: `https://TU_DOMINIO_VERCEL/api/auth/callback/github`
+
+### 2) Crear proyecto en Vercel
+
+- Importa este repositorio en Vercel.
+- Framework preset: Next.js.
+
+### 3) Configurar variables de entorno en Vercel
+
+Agrega las mismas variables del `.env`, ajustando:
+
+- `NEXT_PUBLIC_BETTER_AUTH_URL=https://TU_DOMINIO_VERCEL`
+- `DATABASE_URL` apuntando a tu base de datos de producción.
+
+### 4) Comando de build recomendado
+
+En `Build Command` de Vercel usa:
+
+```bash
+npx prisma generate && next build
+```
+
+### 5) Ejecutar migraciones en producción
+
+Antes o justo después del primer deploy, ejecuta contra la BD de producción:
+
+```bash
+npx prisma migrate deploy
+```
+
+### 6) Verificación post-deploy
+
+- Login con GitHub funcional.
+- Endpoints protegidos responden según rol.
+- Reportes y descarga CSV funcionan.
+- Documentación disponible en `https://TU_DOMINIO_VERCEL/docs`.
+
+## API y documentación
+
+- OpenAPI JSON: `/api/docs`
+- Interfaz Swagger: `/docs`
+- Endpoints principales:
+  - `GET/POST /api/movements`
+  - `GET/PUT/DELETE /api/movements/{id}`
+  - `GET /api/users`
+  - `GET/PUT /api/users/{id}`
+  - `GET /api/reports` y `GET /api/reports?format=csv`
