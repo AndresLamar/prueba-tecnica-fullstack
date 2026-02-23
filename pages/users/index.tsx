@@ -1,8 +1,6 @@
-import type { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useQuery } from '@tanstack/react-query';
 import { Loader2, PencilLine } from 'lucide-react';
-import { requireAdminGuard } from '@/lib/auth/guards';
 import { getUsersAction } from '@/lib/actions/users';
 import { ROUTES } from '@/lib/constants/routes';
 import { Badge } from '@/components/ui/badge';
@@ -17,21 +15,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
-
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const authResult = await requireAdminGuard(context);
-
-  if ('redirect' in authResult) {
-    return {
-      redirect: authResult.redirect,
-    };
-  }
-
-  return {
-    props: {},
-  };
-};
-
 
 const UsersPage = () => {
   const { data: users = [], isLoading, isError, error, refetch, isFetching } = useQuery({

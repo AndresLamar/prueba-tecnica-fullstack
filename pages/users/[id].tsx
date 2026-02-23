@@ -1,11 +1,10 @@
-import type { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { type FormEvent, useEffect, useState } from 'react';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { Loader2 } from 'lucide-react';
-import { requireAdminGuard } from '@/lib/auth/guards';
 import { getUserByIdAction, updateUserAction } from '@/lib/actions/users';
+import { authClient } from '@/lib/auth/client';
 import { ROLES, type Role } from '@/lib/constants/roles';
 import { ROUTES } from '@/lib/constants/routes';
 import { Button } from '@/components/ui/button';
@@ -15,41 +14,15 @@ import { Skeleton } from '@/components/ui/skeleton';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Select, SelectGroup, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-export const getServerSideProps: GetServerSideProps = async (context) => {
-  const authResult = await requireAdminGuard(context);
-
-  if ('redirect' in authResult) {
-    return {
-      redirect: authResult.redirect,
-    };
-  }
-
-  const { id } = context.query;
-  if (typeof id !== 'string' || id.length === 0) {
-    return {
-      redirect: {
-        destination: ROUTES.USERS,
-        permanent: false,
-      },
-    };
-  }
-
-  return {
-    props: {
-      userId: id,
-    },
-  };
-};
-
-type UserEditPageProps = {
-  userId: string;
-};
-
-const UserEditPage = ({ userId }: UserEditPageProps) => {
+const UserEditPage = () => {
   const router = useRouter();
+  const { data: session } = authClient.useSession();
+  const userId = typeof router.query.id === 'string' ? router.query.id : '';
+  const isRouteLoading = !router.isReady || userId.length === 0;
   const { data: user, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['user', userId],
     queryFn: () => getUserByIdAction(userId),
+    enabled: userId.length > 0,
   });
 
   const [name, setName] = useState('');
@@ -74,7 +47,18 @@ const UserEditPage = ({ userId }: UserEditPageProps) => {
     setErrorMessage(null);
 
     try {
+      const isSelfDemotion =
+        session?.user.id === user.id &&
+        user.role === ROLES.ADMIN &&
+        role === ROLES.USER;
+
       await updateMutation.mutateAsync({ userId: user.id, name, role });
+
+      if (isSelfDemotion) {
+        window.location.assign(ROUTES.HOME);
+        return;
+      }
+
       await router.push(ROUTES.USERS);
     } catch (error) {
       if (error instanceof Error) {
@@ -91,7 +75,7 @@ const UserEditPage = ({ userId }: UserEditPageProps) => {
         <CardTitle>Editar usuario</CardTitle>
       </CardHeader>
       <CardContent className='space-y-4'>
-        {isLoading ? (
+        {isRouteLoading || isLoading ? (
           <>
             <div className='space-y-2'>
               <Skeleton className='h-4 w-16 bg-white/10' />
@@ -127,7 +111,7 @@ const UserEditPage = ({ userId }: UserEditPageProps) => {
           </div>
         ) : null}
 
-        {!isLoading && !isError && user ? (
+        {!isRouteLoading && !isLoading && !isError && user ? (
           <form onSubmit={handleSubmit} className='space-y-4'>
             <FieldGroup>
               <Field>
