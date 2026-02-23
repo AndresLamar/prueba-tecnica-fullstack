@@ -1,4 +1,5 @@
 import '@/styles/globals.css';
+import 'swagger-ui-react/swagger-ui.css';
 import type { AppProps } from 'next/app';
 import type { CSSProperties } from 'react';
 import { useEffect, useMemo, useState } from 'react';
