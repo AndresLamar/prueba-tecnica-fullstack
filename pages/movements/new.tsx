@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { Loader2 } from 'lucide-react';
 import { NumericFormat } from 'react-number-format';
+import { toast } from 'sonner';
 import { createMovementAction } from '@/lib/actions/movements';
 import { ROUTES } from '@/lib/constants/routes';
 import { MOVEMENT_TYPES, type MovementType } from '@/lib/types/movement';
@@ -64,12 +65,15 @@ const NewMovementPage = () => {
         type,
       });
       await queryClient.invalidateQueries({ queryKey: ['movements'] });
+      toast.success('Movimiento creado correctamente.');
       await router.push(ROUTES.MOVEMENTS);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
+        toast.error(error.message);
       } else {
         setErrorMessage('No fue posible crear el movimiento.');
+        toast.error('No fue posible crear el movimiento.');
       }
     }
   };

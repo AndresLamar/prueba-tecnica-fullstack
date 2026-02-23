@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Loader2, PencilLine, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { deleteMovementAction, getMovementsAction } from '@/lib/actions/movements';
 import { authClient } from '@/lib/auth/client';
 import { ROLES } from '@/lib/constants/roles';
@@ -52,8 +53,13 @@ const MovementsPage = () => {
 
     try {
       await deleteMutation.mutateAsync(movement.id);
-    } catch {
-      // Handled by UI state below.
+      toast.success('Movimiento eliminado correctamente.');
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        toast.error('No fue posible eliminar el movimiento.');
+      }
     }
   };
 

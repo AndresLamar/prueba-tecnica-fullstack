@@ -4,6 +4,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { Loader2 } from 'lucide-react';
 import { NumericFormat } from 'react-number-format';
+import { toast } from 'sonner';
 import {
   getMovementByIdAction,
   updateMovementAction,
@@ -86,12 +87,15 @@ const MovementEditPage = () => {
       });
       await queryClient.invalidateQueries({ queryKey: ['movements'] });
       await queryClient.invalidateQueries({ queryKey: ['movement', movement.id] });
+      toast.success('Movimiento actualizado correctamente.');
       await router.push(ROUTES.MOVEMENTS);
     } catch (caughtError) {
       if (caughtError instanceof Error) {
         setErrorMessage(caughtError.message);
+        toast.error(caughtError.message);
       } else {
         setErrorMessage('No fue posible actualizar el movimiento.');
+        toast.error('No fue posible actualizar el movimiento.');
       }
     }
   };

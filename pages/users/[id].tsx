@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/input';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Field, FieldGroup, FieldLabel } from '@/components/ui/field';
 import { Select, SelectGroup, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { toast } from 'sonner';
 
 const UserEditPage = () => {
   const router = useRouter();
@@ -59,12 +60,15 @@ const UserEditPage = () => {
         return;
       }
 
+      toast.success('Usuario actualizado correctamente.');
       await router.push(ROUTES.USERS);
     } catch (error) {
       if (error instanceof Error) {
         setErrorMessage(error.message);
+        toast.error(error.message);
       } else {
         setErrorMessage('No fue posible actualizar el usuario.');
+        toast.error('No fue posible actualizar el usuario.');
       }
     }
   };

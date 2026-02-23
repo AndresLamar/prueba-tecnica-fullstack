@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Loader2 } from 'lucide-react';
 import { AppSidebar } from '@/components/app-sidebar';
+import { Toaster } from '@/components/ui/sonner';
 import { PAGE_TITLES_BY_ROUTE, PROTECTED_ROUTE_PATHS } from '@/lib/constants/routes';
 import { ROLES } from '@/lib/constants/roles';
 import { authClient } from '@/lib/auth/client';
@@ -64,6 +65,7 @@ const App = ({ Component, pageProps, router }: AppProps) => {
           </div>
           <Loader2 className='relative z-10 h-6 w-6 animate-spin text-slate-300' aria-label='Cargando' />
         </main>
+        <Toaster />
       </QueryClientProvider>
     );
   }
@@ -72,6 +74,7 @@ const App = ({ Component, pageProps, router }: AppProps) => {
     return (
       <QueryClientProvider client={queryClient}>
         <Component {...pageProps} />
+        <Toaster />
       </QueryClientProvider>
     );
   }
@@ -115,6 +118,7 @@ const App = ({ Component, pageProps, router }: AppProps) => {
           </SidebarInset>
         </SidebarProvider>
       </div>
+      <Toaster />
     </QueryClientProvider>
   );
 };
