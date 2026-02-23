@@ -150,7 +150,7 @@ const MovementsPage = () => {
                               size='sm'
                               className='bg-white/10 text-slate-100 hover:bg-white/20'
                             >
-                              <Link href={getMovementHref(movement.id)}>
+                              <Link href={getMovementHref(movement.id)} className={deleteMutation.isPending ? 'cursor-not-allowed' : ''}>
                                 <PencilLine className='mr-1.5 h-4 w-4' />
                                 Editar
                               </Link>
